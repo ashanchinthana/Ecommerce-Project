@@ -1,14 +1,15 @@
+// src/components/common/Navbar.jsx (updated with new search)
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
-import { ShoppingBagIcon, UserIcon, MoonIcon, SunIcon, MenuIcon, XIcon, SearchIcon } from '@heroicons/react/outline';
+import { ShoppingBagIcon, UserIcon, MoonIcon, SunIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import SearchBar from '../search/SearchBar';
 
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const { itemCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate();
 
@@ -16,6 +17,13 @@ const Navbar = () => {
     // Check for dark mode preference
     const darkModePreference = localStorage.getItem('darkMode') === 'true';
     setIsDarkMode(darkModePreference);
+    
+    // Apply dark mode class
+    if (darkModePreference) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }, []);
 
   const toggleDarkMode = () => {
@@ -27,15 +35,6 @@ const Navbar = () => {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
-    }
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-      setIsMenuOpen(false);
     }
   };
 
@@ -71,17 +70,10 @@ const Navbar = () => {
 
           {/* Desktop Search, Cart, User */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Search Form */}
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-40 lg:w-64 pl-8 pr-4 py-1 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
-              <SearchIcon className="h-4 w-4 absolute left-2.5 top-2 text-gray-500 dark:text-gray-400" />
-            </form>
+            {/* Search Bar */}
+            <div className="w-64">
+              <SearchBar />
+            </div>
 
             {/* Dark Mode Toggle */}
             <button
@@ -181,6 +173,11 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 py-4 border-t border-gray-200 dark:border-gray-700">
+            {/* Mobile Search Bar */}
+            <div className="mb-4">
+              <SearchBar />
+            </div>
+            
             <nav className="flex flex-col space-y-4">
               <Link
                 to="/"
@@ -210,18 +207,6 @@ const Navbar = () => {
               >
                 Contact
               </Link>
-
-              {/* Search Form */}
-              <form onSubmit={handleSearch} className="relative">
-                <input
-                  type="text"
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-8 pr-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                />
-                <SearchIcon className="h-4 w-4 absolute left-2.5 top-3 text-gray-500 dark:text-gray-400" />
-              </form>
 
               {/* Dark Mode Toggle */}
               <button

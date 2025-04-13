@@ -1,104 +1,53 @@
+// src/context/AuthContext.jsx
 import React, { createContext, useState, useEffect } from 'react';
-import { loginUser, registerUser, logoutUser, getCurrentUser } from '../api/authApi';
-import { setAuthToken, removeAuthToken } from '../utils/localStorage';
-import jwtDecode from 'jwt-decode';
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const initAuth = async () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        try {
-          // Verify token is valid
-          const decoded = jwtDecode(token);
-          const currentTime = Date.now() / 1000;
-          
-          if (decoded.exp < currentTime) {
-            // Token expired
-            removeAuthToken();
-            setUser(null);
-          } else {
-            // Valid token, get current user
-            setAuthToken(token);
-            const userData = await getCurrentUser();
-            setUser(userData);
-          }
-        } catch (err) {
-          removeAuthToken();
-          setUser(null);
-          setError('Session expired, please login again');
-        }
+    // Check if user is stored in localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+      } catch (error) {
+        console.error('Error parsing stored user data:', error);
+        localStorage.removeItem('user');
       }
-      setLoading(false);
-    };
-
-    initAuth();
+    }
+    setLoading(false);
   }, []);
 
-  const login = async (credentials) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { token, user } = await loginUser(credentials);
-      setAuthToken(token);
-      setUser(user);
-      return user;
-    } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+  // Login function
+  const login = (userData) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  const register = async (userData) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const { token, user } = await registerUser(userData);
-      setAuthToken(token);
-      setUser(user);
-      return user;
-    } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+  // Logout function
+  const logout = () => {
+    setUser(null);
+    setIsAuthenticated(false);
+    localStorage.removeItem('user');
   };
 
-  const logout = async () => {
-    try {
-      setLoading(true);
-      await logoutUser();
-      removeAuthToken();
-      setUser(null);
-    } catch (err) {
-      console.error('Logout error:', err);
-    } finally {
-      setLoading(false);
-    }
+  const value = {
+    user,
+    loading,
+    isAuthenticated,
+    login,
+    logout
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        error,
-        login,
-        register,
-        logout,
-        isAuthenticated: !!user,
-        isAdmin: user?.isAdmin || false,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

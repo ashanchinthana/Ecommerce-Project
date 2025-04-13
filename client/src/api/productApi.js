@@ -1,65 +1,98 @@
-import api from './index';
+// src/api/productApi.js
+export const getProducts = async (params = {}) => {
+  // Mock data
+  const mockProducts = Array.from({ length: 8 }, (_, index) => ({
+    _id: `product-${index + 1}`,
+    name: `Product ${index + 1}`,
+    price: Math.floor(Math.random() * 100) + 10,
+    description: 'This is a mock product description',
+    images: ['/api/placeholder/300/300'],
+    category: 'Electronics',
+    featured: index < 4,
+    discount: index % 3 === 0 ? 10 : 0,
+    createdAt: new Date().toISOString()
+  }));
 
-// Get all products with optional filters
-export const getProducts = async (filters = {}) => {
-  // Prepare query string from filters object
-  const queryParams = new URLSearchParams();
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== '') {
-      queryParams.append(key, value);
-    }
-  });
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  // Filter products based on params
+  let filteredProducts = [...mockProducts];
   
-  const response = await api.get(`/products?${queryParams.toString()}`);
-  return response.data;
+  if (params.featured) {
+    filteredProducts = filteredProducts.filter(product => product.featured);
+  }
+  
+  if (params.category) {
+    filteredProducts = filteredProducts.filter(product => 
+      product.category.toLowerCase() === params.category.toLowerCase()
+    );
+  }
+  
+  if (params.search) {
+    const searchTerm = params.search.toLowerCase();
+    filteredProducts = filteredProducts.filter(product => 
+      product.name.toLowerCase().includes(searchTerm) || 
+      product.description.toLowerCase().includes(searchTerm)
+    );
+  }
+  
+  // Sort products
+  if (params.sortBy) {
+    const sortDirection = params.order === 'desc' ? -1 : 1;
+    
+    filteredProducts.sort((a, b) => {
+      if (params.sortBy === 'price') {
+        return (a.price - b.price) * sortDirection;
+      } else if (params.sortBy === 'name') {
+        return a.name.localeCompare(b.name) * sortDirection;
+      } else if (params.sortBy === 'createdAt') {
+        return (new Date(a.createdAt) - new Date(b.createdAt)) * sortDirection;
+      }
+      return 0;
+    });
+  }
+  
+  // Pagination
+  const page = parseInt(params.page) || 1;
+  const limit = parseInt(params.limit) || filteredProducts.length;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+  return {
+    products: paginatedProducts,
+    total: filteredProducts.length,
+    pages: Math.ceil(filteredProducts.length / limit)
+  };
 };
 
-// Get product by ID
 export const getProductById = async (id) => {
-  const response = await api.get(`/products/${id}`);
-  return response.data;
-};
+  // Mock product data
+  const product = {
+    _id: id,
+    name: `Product ${id}`,
+    price: Math.floor(Math.random() * 100) + 10,
+    description: 'This is a detailed product description with all the information a customer might need to make an informed purchase decision. It includes details about the product features, benefits, and specifications.',
+    images: ['/api/placeholder/600/400', '/api/placeholder/600/400', '/api/placeholder/600/400'],
+    category: 'Electronics',
+    featured: true,
+    discount: 10,
+    rating: 4.5,
+    numReviews: 12,
+    stockCount: 15,
+    createdAt: new Date().toISOString(),
+    brand: 'Brand Name',
+    specifications: {
+      weight: '300g',
+      dimensions: '10 x 5 x 2 cm',
+      color: 'Black',
+      material: 'Aluminum'
+    }
+  };
 
-// Get product categories
-export const getCategories = async () => {
-  const response = await api.get('/products/categories');
-  return response.data;
-};
-
-// Search products
-export const searchProducts = async (query) => {
-  const response = await api.get(`/products/search?q=${query}`);
-  return response.data;
-};
-
-// Admin: Create new product
-export const createProduct = async (productData) => {
-  const response = await api.post('/products', productData);
-  return response.data;
-};
-
-// Admin: Update product
-export const updateProduct = async (id, productData) => {
-  const response = await api.put(`/products/${id}`, productData);
-  return response.data;
-};
-
-// Admin: Delete product
-export const deleteProduct = async (id) => {
-  const response = await api.delete(`/products/${id}`);
-  return response.data;
-};
-
-// Admin: Upload product image
-export const uploadProductImage = async (id, imageFile) => {
-  const formData = new FormData();
-  formData.append('image', imageFile);
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 500));
   
-  const response = await api.post(`/products/${id}/upload-image`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  
-  return response.data;
+  return { product };
 };
