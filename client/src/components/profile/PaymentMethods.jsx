@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PlusCircleIcon, TrashIcon, PencilIcon, CreditCardIcon, BuildingLibraryIcon } from "@heroicons/react/24/outline";
+import { FiPlusCircle, FiTrash2, FiEdit, FiCreditCard, FiHome } from "react-icons/fi";
 
 const PaymentMethods = () => {
   // Sample payment methods data
@@ -255,7 +255,7 @@ const PaymentMethods = () => {
           onClick={handleAddNewClick}
           className="flex items-center text-indigo-600 hover:text-indigo-800"
         >
-          <PlusCircleIcon className="h-5 w-5 mr-1" />
+          <FiPlusCircle className="h-5 w-5 mr-1" />
           <span>Add New Payment Method</span>
         </button>
       </div>
@@ -279,7 +279,7 @@ const PaymentMethods = () => {
               onClick={() => setActiveTab("credit_card")}
             >
               <div className="flex items-center">
-                <CreditCardIcon className="h-5 w-5 mr-1" />
+                <FiCreditCard className="h-5 w-5 mr-1" />
                 <span>Credit Card</span>
               </div>
             </button>
@@ -293,7 +293,7 @@ const PaymentMethods = () => {
               onClick={() => setActiveTab("bank_account")}
             >
               <div className="flex items-center">
-                <BuildingLibraryIcon className="h-5 w-5 mr-1" />
+                <FiHome className="h-5 w-5 mr-1" />
                 <span>Bank Account</span>
               </div>
             </button>
@@ -485,7 +485,7 @@ const PaymentMethods = () => {
                       {getCardLogo(method.cardType)}
                     </div>
                   ) : (
-                    <BuildingLibraryIcon className="h-6 w-6 mr-3 text-gray-700" />
+                    <FiHome className="h-6 w-6 mr-3 text-gray-700" />
                   )}
                   <div>
                     <h3 className="font-medium text-gray-900">{method.name}</h3>
@@ -511,7 +511,7 @@ const PaymentMethods = () => {
                     className="text-gray-600 hover:text-indigo-600"
                     aria-label="Edit payment method"
                   >
-                    <PencilIcon className="h-5 w-5" />
+                    <FiEdit className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleDeleteClick(method.id)}
@@ -519,7 +519,7 @@ const PaymentMethods = () => {
                     aria-label="Delete payment method"
                     disabled={method.isDefault}
                   >
-                    <TrashIcon className={`h-5 w-5 ${method.isDefault ? "opacity-30" : ""}`} />
+                    <FiTrash2 className={`h-5 w-5 ${method.isDefault ? "opacity-30" : ""}`} />
                   </button>
                 </div>
               </div>

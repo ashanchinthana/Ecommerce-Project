@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { PlusCircleIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { FiPlusCircle, FiTrash2, FiEdit } from "react-icons/fi";
 
 const SavedAddresses = () => {
   const [addresses, setAddresses] = useState([
@@ -144,7 +144,7 @@ const SavedAddresses = () => {
           onClick={handleAddNewClick}
           className="flex items-center text-indigo-600 hover:text-indigo-800"
         >
-          <PlusCircleIcon className="h-5 w-5 mr-1" />
+          <FiPlusCircle className="h-5 w-5 mr-1" />
           <span>Add New Address</span>
         </button>
       </div>
@@ -313,7 +313,7 @@ const SavedAddresses = () => {
                     className="text-gray-600 hover:text-indigo-600"
                     aria-label="Edit address"
                   >
-                    <PencilIcon className="h-5 w-5" />
+                    <FiEdit className="h-5 w-5" />
                   </button>
                   <button
                     onClick={() => handleDeleteClick(address.id)}
@@ -321,7 +321,7 @@ const SavedAddresses = () => {
                     aria-label="Delete address"
                     disabled={address.isDefault}
                   >
-                    <TrashIcon className="h-5 w-5" />
+                    <FiTrash2 className="h-5 w-5" />
                   </button>
                 </div>
               </div>
