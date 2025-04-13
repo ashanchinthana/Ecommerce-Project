@@ -338,9 +338,9 @@ const Home = () => {
       </div>
 
       {/* Testimonials Section */}
-      <div className="container mx-auto px-4 mb-16">
+      <div className="container mx-auto px-20 mb-16">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white text-center mb-12">
-          What Our Customers Say
+          What Our Customers Say 
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -349,6 +349,7 @@ const Home = () => {
               id: 1,
               name: 'Sarah Johnson',
               avatar: '/assets/images/testimonial-1.jpg',
+
               text: 'I love shopping here! The products are high quality and the customer service is excellent.',
               rating: 5,
             },
@@ -362,9 +363,9 @@ const Home = () => {
             {
               id: 3,
               name: 'Emily Williams',
-              avatar: '/assets/images/testimonial-3.jpg',
+              //avatar: '/assets/images/testimonial-3.jpg',
               text: 'Great prices and even better quality. This is now my go-to online store for all my needs.',
-              rating: 4,
+              rating: 5,
             },
           ].map((testimonial) => (
             <div

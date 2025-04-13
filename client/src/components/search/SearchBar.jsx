@@ -86,7 +86,7 @@ const SearchBar = ({ placeholder = 'Search products...', showHistory = true, sho
   
   return (
     <div className="relative">
-      // src/components/search/SearchBar.jsx (continued)
+      
       <form onSubmit={handleSubmit} className="relative">
         <input
           ref={inputRef}
