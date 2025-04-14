@@ -245,13 +245,13 @@ const Home = () => {
       <div className="container mx-auto px-4 mb-16">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-            Featured Products
+            Featured Products 
           </h2>
           <Link
             to="/products?featured=true"
             className="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
           >
-            View All
+            View All 
           </Link>
         </div>
         

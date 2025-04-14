@@ -184,7 +184,7 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
                 className="text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
               >
-                Home
+                Home 
               </Link>
               <Link
                 to="/products"

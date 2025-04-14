@@ -145,7 +145,7 @@ const App = () => {
           <Route path="/shipping" element={<PlaceholderPage title="Shipping Information" />} />
           <Route path="/returns" element={<PlaceholderPage title="Returns & Exchanges" />} />
           <Route path="/terms" element={<PlaceholderPage title="Terms & Conditions" />} />
-          <Route path="/privacy" element={<PlaceholderPage title="Privacy Policy" />} />
+          <Route path="/privacy" element={<PlaceholderPage title="PrivacyPolicy" />} />
           
           {/* 404 Route */}
           <Route path="*" element={<PlaceholderPage title="Page Not Found (404)" />} />
